@@ -1,7 +1,7 @@
-package com.evanisnor.gradle.semver.taskrunnables
+package com.evanisnor.gradle.semver.behavior
 
-import com.evanisnor.gradle.semver.NoVersionsFoundError
-import com.evanisnor.gradle.semver.system.Procedures
+import com.evanisnor.gradle.semver.model.NoVersionsFoundError
+import com.evanisnor.gradle.semver.procedures.Procedures
 
 class ListVersions(
     private val procedures: Procedures
@@ -12,7 +12,7 @@ class ListVersions(
         if (versions.isEmpty()) {
             println(NoVersionsFoundError().message)
         } else {
-            procedures.sortedVersions().forEach {
+            versions.forEach {
                 println(it)
             }
         }

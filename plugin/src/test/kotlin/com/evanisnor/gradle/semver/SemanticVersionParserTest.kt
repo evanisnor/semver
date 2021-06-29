@@ -1,5 +1,7 @@
 package com.evanisnor.gradle.semver
 
+import com.evanisnor.gradle.semver.model.SemanticVersion
+import com.evanisnor.gradle.semver.procedures.SemanticVersionParser
 import com.evanisnor.gradle.semver.testdata.SemanticVersionData
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.params.ParameterizedTest
@@ -17,7 +19,7 @@ class SemanticVersionParserTest {
         @Suppress("unused")
         @JvmStatic
         fun validPreReleaseUntaggedSemanticVersionStrings() =
-            SemanticVersionData.validPreReleaseUntaggedSemanticVersionStrings()
+            SemanticVersionData.validPreReleaseSemanticVersionStrings()
     }
 
     @ParameterizedTest
@@ -30,15 +32,6 @@ class SemanticVersionParserTest {
     }
 
     @ParameterizedTest
-    @MethodSource("validPreReleaseUntaggedSemanticVersionStrings")
-    fun `Parses untagged versions successfully`(semverString: String, semver: SemanticVersion) {
-        val semanticVersionParser = SemanticVersionParser()
-        val parsed = semanticVersionParser.parseSemVer(semverString)
-
-        assertThat(parsed.isTagged).isFalse()
-    }
-
-    @ParameterizedTest
     @ValueSource(
         strings = [
             "0.0.-1",
@@ -47,7 +40,6 @@ class SemanticVersionParserTest {
             "-1.-1.-1",
             "-1.-1.-1-RC.-99",
             "-1.-1.-1-SNAPSHOT",
-            "1.0.0+abcdefghijklmnop",
             "",
             "a",
             "abcd",

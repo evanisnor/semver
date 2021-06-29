@@ -1,5 +1,7 @@
 package com.evanisnor.gradle.semver
 
+import com.evanisnor.gradle.semver.util.copyInto
+import com.evanisnor.gradle.semver.util.runGradleCommand
 import com.google.common.truth.Truth.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.AfterEach
@@ -16,8 +18,7 @@ class SemverPluginTest {
 
     @BeforeEach
     fun setup() {
-        javaClass.classLoader.getResource("settings.gradle.kts")!!.toFile().copyInto(testProject)
-        javaClass.classLoader.getResource("build.gradle.kts")!!.toFile().copyInto(testProject)
+        javaClass.classLoader.getResource("settings.gradle.kts")!!.copyInto(testProject)
     }
 
     @AfterEach
@@ -26,9 +27,24 @@ class SemverPluginTest {
     }
 
     @Test
-    fun runNextMinor() {
-        val result = testProject.runGradleCommand("nextMinor")
-        assertThat(result.task(":nextMinor")!!.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    fun printConfiguration() {
+        javaClass.classLoader.getResource("build.gradle.kts")!!.copyInto(testProject)
+
+        val result = testProject.runGradleCommand("versionConfiguration")
+        assertThat(result.task(":versionConfiguration")!!.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(result.output).contains(
+            """
+                 > Task :versionConfiguration
+                                   remote: origin
+                                   prefix: v
+                    preReleaseIdentifiers: [alpha, beta, gamma]
+                 initialPreReleaseVersion: 1
+                       preReleaseMetadata: ShortSha
+                          releaseMetadata: Timestamp
+                    untaggedIncrementRule: IncrementMajor
+                       untaggedIdentifier: SNAPSHOT
+        """.trimIndent()
+        )
     }
 
 

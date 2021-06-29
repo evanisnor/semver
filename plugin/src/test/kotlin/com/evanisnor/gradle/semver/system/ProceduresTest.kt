@@ -1,19 +1,36 @@
 package com.evanisnor.gradle.semver.system
 
-import com.evanisnor.gradle.semver.SemanticVersion
-import com.evanisnor.gradle.semver.captureStandardOutput
+import com.evanisnor.gradle.semver.procedures.SemanticVersionParser
+import com.evanisnor.gradle.semver.model.SemanticVersion
+import com.evanisnor.gradle.semver.model.SemanticVersionConfiguration
+import com.evanisnor.gradle.semver.procedures.Procedures
 import com.evanisnor.gradle.semver.testdata.VersionOrder
-import com.evanisnor.gradle.semver.toSemanticVersion
+import com.evanisnor.gradle.semver.util.captureStandardOutput
+import com.evanisnor.gradle.semver.util.toSemanticVersion
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.gradle.api.Project
 import org.junit.jupiter.api.Test
 
 class ProceduresTest {
 
     private val git: Git = mockk(relaxed = true)
-    private val procedures = Procedures(git)
+    private val project: Project = mockk(relaxed = true)
+    private val parser: SemanticVersionParser = mockk(relaxed = true) {
+        every { parseSemVer(any()) } answers {
+            if (invocation.args.first() is String) {
+                (invocation.args.first() as String).toSemanticVersion()
+            } else {
+                SemanticVersion()
+            }
+        }
+    }
+    private val configuration: SemanticVersionConfiguration = mockk {
+        every { remote } returns "testorigin"
+    }
+    private val procedures = Procedures(git, project, parser, configuration)
 
     @Test
     fun `Returns true when git commit is tagged`() {
@@ -37,33 +54,39 @@ class ProceduresTest {
     }
 
     @Test
+    fun `Sorts more versions according to semver rules`() {
+        val sortedSemanticVersions = VersionOrder.semverOrgPreReleaseOrdering().map {
+            it.toSemanticVersion()
+        }
+        every { git.listAllTags() } returns sortedSemanticVersions.map { it.toString() }
+        assertThat(procedures.sortedVersions()).isEqualTo(sortedSemanticVersions)
+    }
+
+    @Test
     fun `tagAndPush tags and pushes`() {
+        val version = SemanticVersion(0, 1, 0)
+
         val printed = captureStandardOutput {
-            procedures.tagAndPush(
-                SemanticVersion(0, 1, 0, isTagged = false)
-            )
+            procedures.tagAndPush(version)
         }
 
-        verify { git.createTag("0.1.0") }
-        verify { git.push("origin", "0.1.0") }
+        verify { git.createTag(version) }
+        verify { git.push("testorigin", version) }
         assertThat(printed).isEqualTo("0.1.0 released\n")
     }
 
     @Test
     fun `tagAndPush dry run prints git commands`() {
-
+        every { project.properties } returns mapOf("dry-run" to "")
         val printed = captureStandardOutput {
-            procedures.tagAndPush(
-                SemanticVersion(0, 1, 0, isTagged = false),
-                isDryRun = true
-            )
+            procedures.tagAndPush(SemanticVersion(0, 1, 0))
         }
 
         assertThat(printed).isEqualTo(
             """
                 **DRY RUN**
                 git tag 0.1.0
-                git push origin 0.1.0
+                git push testorigin 0.1.0
                 
             """.trimIndent()
         )
