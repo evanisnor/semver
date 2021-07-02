@@ -14,6 +14,7 @@ semanticVersion {
     )
     preReleaseMetadata = ReleaseMetadata.ShortSha
     initialPreReleaseVersion = 1
-    releaseMetadata = ReleaseMetadata.Timestamp
+    releaseMetadata = ReleaseMetadata.ShortSha
+    untaggedIdentifier = "UNRELEASED"
     untaggedIncrementRule = UntaggedIncrementRule.IncrementMajor
 }

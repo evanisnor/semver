@@ -13,6 +13,7 @@ fun String.toSemanticVersion() = SemanticVersionParser().parseSemVer(this)
 fun URL.toFile(): File = File(file)
 fun URL.copyInto(directory: File) = toFile().copyInto(directory)
 fun File.copyInto(directory: File) = copyTo(File("${directory.absolutePath}/$name"))
+fun File.rename(name: String) = renameTo(File("$parent/$name"))
 
 fun File.runGradleCommand(command: String): BuildResult = GradleRunner.create()
     .withProjectDir(this)

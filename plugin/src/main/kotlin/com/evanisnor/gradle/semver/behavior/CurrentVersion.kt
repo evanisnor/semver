@@ -18,7 +18,7 @@ class CurrentVersion(
     fun determineCurrentVersion(): SemanticVersion {
         val sortedVersions = procedures.sortedVersions()
         return when {
-            // There are no commits. Print the base/initial semantic version.
+            // There are no commits. Use the base/initial semantic version.
             sortedVersions.isEmpty() -> SemanticVersion()
             // The commit is tagged. Grab the top result as the current version.
             procedures.isCommitTagged() -> sortedVersions.first()
