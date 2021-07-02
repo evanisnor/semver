@@ -7,12 +7,20 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /**
- * USAGE gradle versions gradle latestVersion gradle currentVersion gradle nextPatch gradle
- * nextMinor gradle nextMajor gradle nextCandidate gradle releaseNextPatch gradle
- * releaseNextPatchCandidate gradle releaseNextMinor gradle releaseNextMinorCandidate gradle
- * releaseNextMajor gradle releaseNextMajorCandidate gradle releaseNextCandidate
+ * Semantic Versioning plugin for Gradle projects
  *
- * PARAMS -Pdry-run
+ * See [SemanticVersionConfiguration] for "semanticVersion" plugin configuration
+ *
+ * Tasks:
+ *  - currentVersion
+ *  - latestVersion
+ *  - listVersions
+ *  - nextVersion
+ *  - next<Pre-release Identifier>
+ *  - release<Pre-Release Identifier>
+ *
+ * Parameters:
+ *  - dry-run
  */
 class SemverPlugin : Plugin<Project> {
 

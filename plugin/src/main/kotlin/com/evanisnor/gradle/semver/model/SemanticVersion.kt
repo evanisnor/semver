@@ -1,6 +1,8 @@
 package com.evanisnor.gradle.semver.model
 
-/** Version data following rules defined here -> https://semver.org/ */
+/**
+ * Version data following rules defined here -> https://semver.org/
+ */
 data class SemanticVersion(
     val major: Int = 0,
     val minor: Int = 1,

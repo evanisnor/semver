@@ -1,10 +1,14 @@
 package com.evanisnor.gradle.semver.behavior
 
 import com.evanisnor.gradle.semver.RuntimeModule
+import com.evanisnor.gradle.semver.support.DependencyModule
 
+/**
+ * Dependency module for task behaviors
+ */
 class BehaviorModule(
     private val runtimeModule: RuntimeModule
-) {
+) : DependencyModule {
 
     fun currentVersion() = CurrentVersion(runtimeModule.procedures(), runtimeModule.configuration())
 

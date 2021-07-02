@@ -4,6 +4,9 @@ import com.evanisnor.gradle.semver.model.SemanticVersion
 import com.evanisnor.gradle.semver.support.run
 import com.evanisnor.gradle.semver.support.runForExitCode
 
+/**
+ * Wrapper class for git commands, executed via [ProcessBuilder]
+ */
 class Git(private val processBuilder: ProcessBuilder) {
 
     object Commands {

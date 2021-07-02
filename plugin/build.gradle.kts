@@ -1,3 +1,5 @@
+import com.evanisnor.semver.build.Dependencies
+
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`
@@ -13,14 +15,20 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.10")
     implementation(gradleApi())
-
     testImplementation(gradleTestKit())
-    testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.5.10")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation("com.google.truth:truth:1.1.3")
-    testImplementation("io.mockk:mockk:1.11.0")
+
+    with(Dependencies.Jetbrains) {
+        implementation(kotlinStdLib)
+        implementation(kotlinReflect)
+    }
+
+    with(Dependencies.Junit) {
+        testImplementation(jupiterApi)
+        testImplementation(jupiterParams)
+        testRuntimeOnly(jupiterEngine)
+    }
+
+    testImplementation(Dependencies.Google.truth)
+    testImplementation(Dependencies.Mockk.mockk)
 }

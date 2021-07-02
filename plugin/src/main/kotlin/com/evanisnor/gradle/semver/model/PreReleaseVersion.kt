@@ -1,6 +1,8 @@
 package com.evanisnor.gradle.semver.model
 
 import com.evanisnor.gradle.semver.support.compareToAsIntsIfPossiblePlease
+import com.evanisnor.gradle.semver.support.findVersion
+import com.evanisnor.gradle.semver.support.splitIdentifier
 
 /**
  * A pre-release version MAY be denoted by appending a hyphen and a series of dot separated
@@ -17,8 +19,8 @@ data class PreReleaseVersion(
     /* Includes hyphens an dots */
     val identifier: String,
     /* Includes hyphens */
-    val fields: List<String> = identifier.split(".").dropLastWhile { it.toIntOrNull() != null },
-    val version: Int? = identifier.split(".").lastOrNull { it.toIntOrNull() != null }?.toInt()
+    val fields: List<String> = identifier.splitIdentifier(),
+    val version: Int? = identifier.findVersion()
 ) : Comparable<PreReleaseVersion> {
 
     fun next() =

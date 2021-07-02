@@ -1,5 +1,8 @@
 package com.evanisnor.gradle.semver.model
 
+/**
+ * Configuration model for the "semanticVersion" block in your project.
+ */
 abstract class SemanticVersionConfiguration {
 
     class Default : SemanticVersionConfiguration()

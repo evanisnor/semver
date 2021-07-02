@@ -3,6 +3,9 @@ package com.evanisnor.gradle.semver.procedures
 import com.evanisnor.gradle.semver.model.PreReleaseVersion
 import com.evanisnor.gradle.semver.model.SemanticVersion
 import com.evanisnor.gradle.semver.model.SemanticVersionConfiguration
+import com.evanisnor.gradle.semver.support.findVersion
+import com.evanisnor.gradle.semver.support.omitVersion
+import com.evanisnor.gradle.semver.support.splitIdentifier
 
 /**
  * Semver Parser
@@ -26,7 +29,11 @@ class SemanticVersionParser(
                 major = groups[1].toInt(),
                 minor = groups[2].toInt(),
                 patch = groups[3].toInt(),
-                preReleaseVersion = if (groups[4].isBlank()) null else PreReleaseVersion(groups[4]),
+                preReleaseVersion = if (groups[4].isBlank()) null else PreReleaseVersion(
+                    identifier = groups[4].omitVersion(),
+                    fields = groups[4].splitIdentifier(),
+                    version = groups[4].findVersion()
+                ),
                 buildMetadata = groups[5].ifBlank { null }
             )
         }
