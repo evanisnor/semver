@@ -1,43 +1,36 @@
 package com.evanisnor.gradle.semver.android
 
 import com.android.build.api.dsl.ApplicationExtension
+import com.evanisnor.gradle.semver.SemverPlugin
+import com.evanisnor.gradle.semver.model.SemanticVersion
+import com.evanisnor.gradle.semver.model.SemanticVersionConfiguration
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /**
- * TODO
+ * Semantic Versioning plugin for Android Projects
  *
- * USAGE
- * gradle versions
- * gradle latestVersion
- * gradle currentVersion
- * gradle nextPatch
- * gradle nextMinor
- * gradle nextMajor
- * gradle nextCandidate
- * gradle releaseNextPatch
- * gradle releaseNextPatchCandidate
- * gradle releaseNextMinor
- * gradle releaseNextMinorCandidate
- * gradle releaseNextMajor
- * gradle releaseNextMajorCandidate
- * gradle releaseNextCandidate
+ * Automatically sets your Android Application's version name and version code based on the tags present in
+ * your git repository. Default: 0.1.0-SNAPSHOT
  *
- * PARAMS
- * -Pdry-run
+ * See [SemverPlugin] for configuration and tasks.
  */
-class SemverPlugin : Plugin<Project> {
+class AndroidSemverPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val currentVersion = ""
+        project.plugins.apply(SemverPlugin::class.java)
 
-//        project.plugins.apply()
+        if (project.version is SemanticVersion) {
+            val currentVersion = project.version as SemanticVersion
 
-        project.version = currentVersion.toString()
-        project.extensions.findByType(ApplicationExtension::class.java)?.let {
-            it.defaultConfig.versionName = currentVersion.toString()
-            it.defaultConfig.versionCode = currentVersion.toInt()
+            val configuration = project.extensions.findByType(SemanticVersionConfiguration::class.java)
+                ?: object : SemanticVersionConfiguration() {}
+
+            project.extensions.findByType(ApplicationExtension::class.java)?.let {
+                it.defaultConfig.versionName = currentVersion.toString()
+                it.defaultConfig.versionCode = currentVersion.toVersionCode(configuration.preReleaseIdentifiers)
+            }
         }
-
     }
+
 }

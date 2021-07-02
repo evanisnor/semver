@@ -1,21 +1,44 @@
+import com.evanisnor.semver.build.Dependencies
+
 plugins {
     kotlin("jvm")
+    `java-gradle-plugin`
 }
 
 repositories {
     google()
 }
 
+gradlePlugin {
+    plugins {
+        create("semver") {
+            id = "com.evanisnor.semver.android"
+            implementationClass = "com.evanisnor.gradle.semver.android.AndroidSemverPlugin"
+        }
+    }
+}
+
 dependencies {
     implementation(projects.plugin)
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.10")
     implementation(gradleApi())
+    testImplementation(gradleTestKit())
 
+    with(Dependencies.Jetbrains) {
+        implementation(kotlinStdLib)
+        implementation(kotlinReflect)
+    }
 
-    val android = "7.0.0-beta03"
-    val androidGradlePlugin = "com.android.tools.build:gradle:$android"
-    val androidGradlePluginApi = "com.android.tools.build:gradle-api:$android"
+    with(Dependencies.Android) {
+        implementation(androidGradlePlugin)
+        implementation(androidGradlePluginApi)
+    }
 
-    implementation(androidGradlePlugin)
-    implementation(androidGradlePluginApi)
+    with(Dependencies.Junit) {
+        testImplementation(jupiterApi)
+        testImplementation(jupiterParams)
+        testRuntimeOnly(jupiterEngine)
+    }
+
+    testImplementation(Dependencies.Google.truth)
+    testImplementation(Dependencies.Mockk.mockk)
 }
