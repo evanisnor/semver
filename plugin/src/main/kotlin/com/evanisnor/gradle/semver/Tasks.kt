@@ -1,38 +1,9 @@
-package com.evanisnor.gradle.semver.procedures
+package com.evanisnor.gradle.semver
 
-import com.evanisnor.gradle.semver.RuntimeModule
 import com.evanisnor.gradle.semver.behavior.BehaviorModule
 import org.gradle.api.DefaultTask
-import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
-
-class TaskGenerator(
-    private val runtimeModule: RuntimeModule,
-    private val behaviorModule: BehaviorModule,
-    private val project: Project = runtimeModule.project()
-) {
-
-    fun registerTasks() {
-        project.tasks.register("versionConfiguration", PrintConfigurationTask::class.java, runtimeModule)
-        project.tasks.register("versions", ListVersionsTask::class.java, behaviorModule)
-        project.tasks.register("latestVersion", LatestVersionTask::class.java, behaviorModule)
-        project.tasks.register("currentVersion", CurrentVersionTask::class.java, behaviorModule)
-        project.tasks.register("releaseMajor", ReleaseNextMajorTask::class.java, behaviorModule)
-        project.tasks.register("releaseMinor", ReleaseNextMinorTask::class.java, behaviorModule)
-        project.tasks.register("releasePatch", ReleaseNextPatchTask::class.java, behaviorModule)
-
-        runtimeModule.configuration().preReleaseIdentifiers.forEach { preReleaseIdentifier ->
-            // Register a new release task to release the next pre-release version
-            project.tasks.register(
-                "release${preReleaseIdentifier.capitalize()}",
-                ReleaseNextPreReleaseTask::class.java,
-                behaviorModule,
-                preReleaseIdentifier
-            )
-        }
-    }
-}
 
 open class PrintConfigurationTask @Inject constructor(
     private val runtimeModule: RuntimeModule
@@ -44,7 +15,6 @@ open class PrintConfigurationTask @Inject constructor(
         println(runtimeModule.configuration())
     }
 }
-
 
 open class CurrentVersionTask @Inject constructor(
     private val behaviorModule: BehaviorModule
