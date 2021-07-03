@@ -14,7 +14,7 @@ abstract class SemanticVersionConfiguration {
         Timestamp
     }
 
-    enum class UntaggedIncrementRule {
+    enum class IncrementRule {
         IncrementPatch,
         IncrementMinor,
         IncrementMajor
@@ -22,22 +22,22 @@ abstract class SemanticVersionConfiguration {
 
     var remote: String = "origin"
     var prefix: String = ""
+    var incrementRule = IncrementRule.IncrementPatch
     var preReleaseIdentifiers: List<String> = listOf("alpha", "beta")
     var preReleaseMetadata: ReleaseMetadata = ReleaseMetadata.None
     var initialPreReleaseVersion: Int = 0
     var releaseMetadata: ReleaseMetadata = ReleaseMetadata.None
     var untaggedIdentifier = "SNAPSHOT"
-    var untaggedIncrementRule = UntaggedIncrementRule.IncrementPatch
 
     override fun toString(): String =
         """
                             remote: $remote
                             prefix: $prefix
+                     incrementRule: $incrementRule
              preReleaseIdentifiers: $preReleaseIdentifiers
           initialPreReleaseVersion: $initialPreReleaseVersion
                 preReleaseMetadata: $preReleaseMetadata
                    releaseMetadata: $releaseMetadata
-             untaggedIncrementRule: $untaggedIncrementRule
                 untaggedIdentifier: $untaggedIdentifier
         """.trimIndent()
 

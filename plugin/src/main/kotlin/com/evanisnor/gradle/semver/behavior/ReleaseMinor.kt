@@ -4,7 +4,7 @@ import com.evanisnor.gradle.semver.model.SemanticVersion
 import com.evanisnor.gradle.semver.procedures.MetadataBuilder
 import com.evanisnor.gradle.semver.procedures.Procedures
 
-class ReleaseNextMinor(
+class ReleaseMinor(
     private val procedures: Procedures,
     private val metadataBuilder: MetadataBuilder
 ) : Runnable {

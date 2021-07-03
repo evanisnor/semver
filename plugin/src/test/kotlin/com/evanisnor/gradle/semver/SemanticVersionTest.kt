@@ -41,7 +41,7 @@ class SemanticVersionTest {
         semver.nextMajor()
         semver.nextMinor()
         semver.nextPatch()
-        semver.increment(SemanticVersionConfiguration.UntaggedIncrementRule.IncrementPatch)
+        semver.increment(SemanticVersionConfiguration.IncrementRule.IncrementPatch)
         semver.nextPreReleaseVersion(identifier = "RC", initialVersion = 5)
         semver.withBuildMetadata("abcd")
         assertThat(semver).isEqualTo(SemanticVersion(0, 1, 0))
@@ -57,7 +57,7 @@ class SemanticVersionTest {
     @Test
     fun `Increments Major by one from increment rule`() {
         val semver = SemanticVersion(0, 1, 0)
-            .increment(SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMajor)
+            .increment(SemanticVersionConfiguration.IncrementRule.IncrementMajor)
 
         assertThat(semver).isEqualTo(
             SemanticVersion(1, 0, 0)
@@ -74,7 +74,7 @@ class SemanticVersionTest {
     @Test
     fun `Increments Minor by one from increment rule`() {
         val semver = SemanticVersion(0, 1, 0)
-            .increment(SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMinor)
+            .increment(SemanticVersionConfiguration.IncrementRule.IncrementMinor)
 
         assertThat(semver).isEqualTo(SemanticVersion(0, 2, 0))
     }
@@ -89,7 +89,7 @@ class SemanticVersionTest {
     @Test
     fun `Increments Patch by one from increment rule`() {
         val semver = SemanticVersion(0, 1, 0)
-            .increment(SemanticVersionConfiguration.UntaggedIncrementRule.IncrementPatch)
+            .increment(SemanticVersionConfiguration.IncrementRule.IncrementPatch)
 
         assertThat(semver).isEqualTo(SemanticVersion(0, 1, 1))
     }

@@ -10,19 +10,19 @@ class BehaviorModule(
     private val runtimeModule: RuntimeModule
 ) : DependencyModule {
 
-    fun currentVersion() = singleton(CurrentVersion(runtimeModule.procedures(), runtimeModule.configuration()))
+    fun currentVersion() = CurrentVersion(runtimeModule.procedures(), runtimeModule.configuration())
 
     fun latestVersion() = LatestVersion(runtimeModule.procedures())
 
     fun listVersions() = ListVersions(runtimeModule.procedures())
 
-    fun releaseNextMajor() = ReleaseNextMajor(runtimeModule.procedures(), runtimeModule.metadataBuilder())
+    fun releaseNextMajor() = ReleaseMajor(runtimeModule.procedures(), runtimeModule.metadataBuilder())
 
-    fun releaseNextMinor() = ReleaseNextMinor(runtimeModule.procedures(), runtimeModule.metadataBuilder())
+    fun releaseNextMinor() = ReleaseMinor(runtimeModule.procedures(), runtimeModule.metadataBuilder())
 
-    fun releaseNextPatch() = ReleaseNextPatch(runtimeModule.procedures(), runtimeModule.metadataBuilder())
+    fun releaseNextPatch() = ReleasePatch(runtimeModule.procedures(), runtimeModule.metadataBuilder())
 
-    fun releaseNextPreRelease(preReleaseIdentifier: String) = ReleaseNextPreRelease(
+    fun releaseNextPreRelease(preReleaseIdentifier: String) = ReleasePreRelease(
         runtimeModule.procedures(),
         runtimeModule.configuration(),
         runtimeModule.metadataBuilder(),

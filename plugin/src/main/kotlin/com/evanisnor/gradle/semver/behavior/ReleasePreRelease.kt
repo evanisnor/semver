@@ -5,7 +5,7 @@ import com.evanisnor.gradle.semver.model.SemanticVersionConfiguration
 import com.evanisnor.gradle.semver.procedures.MetadataBuilder
 import com.evanisnor.gradle.semver.procedures.Procedures
 
-class ReleaseNextPreRelease(
+class ReleasePreRelease(
     private val procedures: Procedures,
     private val configuration: SemanticVersionConfiguration,
     private val metadataBuilder: MetadataBuilder,
@@ -29,7 +29,7 @@ class ReleaseNextPreRelease(
         // Current version is already a pre-release
         sortedVersions.isNotEmpty() && sortedVersions.first().isPreRelease() -> sortedVersions.first()
         // Current version is not a pre-release and needs to be incremented
-        sortedVersions.isNotEmpty() -> sortedVersions.first().increment(configuration.untaggedIncrementRule)
+        sortedVersions.isNotEmpty() -> sortedVersions.first().increment(configuration.incrementRule)
         // There are no versions, so use the base version
         else -> SemanticVersion()
     }.nextPreReleaseVersion(

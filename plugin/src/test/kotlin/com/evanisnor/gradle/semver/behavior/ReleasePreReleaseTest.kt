@@ -14,13 +14,13 @@ class ReleasePreReleaseTest {
 
     private val procedures: Procedures = mockk()
     private val configuration: SemanticVersionConfiguration = mockk {
-        every { untaggedIncrementRule } returns SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMinor
+        every { incrementRule } returns SemanticVersionConfiguration.IncrementRule.IncrementMinor
         every { initialPreReleaseVersion } returns 1
     }
     private val metadataBuilder: MetadataBuilder = mockk()
     private val preReleaseIdentifier = "beta"
 
-    private val releaseNextPreRelease = ReleaseNextPreRelease(
+    private val releaseNextPreRelease = ReleasePreRelease(
         procedures = procedures,
         configuration = configuration,
         metadataBuilder = metadataBuilder,

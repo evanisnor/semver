@@ -53,7 +53,7 @@ class CurrentVersionTest {
         every { procedures.isCommitTagged() } returns false
         with(configuration) {
             every { untaggedIdentifier } returns "SNAPSHOT"
-            every { untaggedIncrementRule } returns SemanticVersionConfiguration.UntaggedIncrementRule.IncrementPatch
+            every { incrementRule } returns SemanticVersionConfiguration.IncrementRule.IncrementPatch
         }
 
         val currentVersion = currentVersion.determineCurrentVersion(sortedVersions)

@@ -35,11 +35,11 @@ data class SemanticVersion(
             patch = patch + 1,
         )
 
-    /** Increment the version according to the provided [SemanticVersionConfiguration.UntaggedIncrementRule] **/
-    fun increment(incrementRule: SemanticVersionConfiguration.UntaggedIncrementRule) = when (incrementRule) {
-        SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMajor -> nextMajor()
-        SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMinor -> nextMinor()
-        SemanticVersionConfiguration.UntaggedIncrementRule.IncrementPatch -> nextPatch()
+    /** Increment the version according to the provided [SemanticVersionConfiguration.IncrementRule] **/
+    fun increment(incrementRule: SemanticVersionConfiguration.IncrementRule) = when (incrementRule) {
+        SemanticVersionConfiguration.IncrementRule.IncrementMajor -> nextMajor()
+        SemanticVersionConfiguration.IncrementRule.IncrementMinor -> nextMinor()
+        SemanticVersionConfiguration.IncrementRule.IncrementPatch -> nextPatch()
     }
 
     /**

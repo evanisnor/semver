@@ -22,7 +22,7 @@ class CurrentVersion(
         // The commit is tagged. Grab the top result as the current version.
         procedures.isCommitTagged() -> sortedVersions.first()
         // The commit is not tagged. Build the next untagged version based on configuration rules.
-        else -> untaggedVersion(sortedVersions.first().increment(configuration.untaggedIncrementRule))
+        else -> untaggedVersion(sortedVersions.first().increment(configuration.incrementRule))
     }
 
 
