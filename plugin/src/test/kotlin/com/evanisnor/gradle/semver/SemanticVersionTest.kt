@@ -1,6 +1,7 @@
 package com.evanisnor.gradle.semver
 
 import com.evanisnor.gradle.semver.model.SemanticVersion
+import com.evanisnor.gradle.semver.model.SemanticVersionConfiguration
 import com.evanisnor.gradle.semver.testdata.SemanticVersionData
 import com.evanisnor.gradle.semver.testdata.VersionOrder
 import com.evanisnor.gradle.semver.util.toSemanticVersion
@@ -40,6 +41,7 @@ class SemanticVersionTest {
         semver.nextMajor()
         semver.nextMinor()
         semver.nextPatch()
+        semver.increment(SemanticVersionConfiguration.UntaggedIncrementRule.IncrementPatch)
         semver.nextPreReleaseVersion(identifier = "RC", initialVersion = 5)
         semver.withBuildMetadata("abcd")
         assertThat(semver).isEqualTo(SemanticVersion(0, 1, 0))
@@ -47,20 +49,49 @@ class SemanticVersionTest {
 
     @Test
     fun `Increments Major by one`() {
+        val semver = SemanticVersion(0, 1, 0).nextMajor()
+
+        assertThat(semver).isEqualTo(SemanticVersion(1, 0, 0))
+    }
+
+    @Test
+    fun `Increments Major by one from increment rule`() {
         val semver = SemanticVersion(0, 1, 0)
-        assertThat(semver.nextMajor()).isEqualTo(SemanticVersion(1, 0, 0))
+            .increment(SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMajor)
+
+        assertThat(semver).isEqualTo(
+            SemanticVersion(1, 0, 0)
+        )
     }
 
     @Test
     fun `Increments Minor by one`() {
+        val semver = SemanticVersion(0, 1, 0).nextMinor()
+
+        assertThat(semver).isEqualTo(SemanticVersion(0, 2, 0))
+    }
+
+    @Test
+    fun `Increments Minor by one from increment rule`() {
         val semver = SemanticVersion(0, 1, 0)
-        assertThat(semver.nextMinor()).isEqualTo(SemanticVersion(0, 2, 0))
+            .increment(SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMinor)
+
+        assertThat(semver).isEqualTo(SemanticVersion(0, 2, 0))
     }
 
     @Test
     fun `Increments Patch by one`() {
+        val semver = SemanticVersion(0, 1, 0).nextPatch()
+
+        assertThat(semver).isEqualTo(SemanticVersion(0, 1, 1))
+    }
+
+    @Test
+    fun `Increments Patch by one from increment rule`() {
         val semver = SemanticVersion(0, 1, 0)
-        assertThat(semver.nextPatch()).isEqualTo(SemanticVersion(0, 1, 1))
+            .increment(SemanticVersionConfiguration.UntaggedIncrementRule.IncrementPatch)
+
+        assertThat(semver).isEqualTo(SemanticVersion(0, 1, 1))
     }
 
     @Test

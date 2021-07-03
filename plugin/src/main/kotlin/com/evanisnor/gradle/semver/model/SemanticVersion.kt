@@ -35,6 +35,13 @@ data class SemanticVersion(
             patch = patch + 1,
         )
 
+    /** Increment the version according to the provided [SemanticVersionConfiguration.UntaggedIncrementRule] **/
+    fun increment(incrementRule: SemanticVersionConfiguration.UntaggedIncrementRule) = when (incrementRule) {
+        SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMajor -> nextMajor()
+        SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMinor -> nextMinor()
+        SemanticVersionConfiguration.UntaggedIncrementRule.IncrementPatch -> nextPatch()
+    }
+
     /**
      * Increment [preReleaseVersion] by one if defined, otherwise set the next pre-release version
      * according to [PreReleaseVersion.next] and set its version as the initial version. Resets
@@ -70,6 +77,9 @@ data class SemanticVersion(
             preReleaseVersion = preReleaseVersion,
             buildMetadata = buildMetadata
         )
+
+    /** True if this version is a pre-release version **/
+    fun isPreRelease(): Boolean = preReleaseVersion != null
 
     /**
      * <valid semver> ::= <version core>

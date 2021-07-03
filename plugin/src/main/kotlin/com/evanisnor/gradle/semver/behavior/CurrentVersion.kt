@@ -11,26 +11,22 @@ class CurrentVersion(
 ) : Runnable {
 
     override fun run() {
-        val currentVersion = determineCurrentVersion()
+        val sortedVersions = procedures.sortedVersions()
+        val currentVersion = determineCurrentVersion(sortedVersions)
         println("$currentVersion")
     }
 
-    fun determineCurrentVersion(): SemanticVersion {
-        val sortedVersions = procedures.sortedVersions()
-        return when {
-            // There are no commits. Use the base/initial semantic version.
-            sortedVersions.isEmpty() -> SemanticVersion()
-            // The commit is tagged. Grab the top result as the current version.
-            procedures.isCommitTagged() -> sortedVersions.first()
-            // The commit is not tagged. Build the latest untagged version based on configuration rules.
-            else -> untaggedVersion(sortedVersions.first())
-        }
+    fun determineCurrentVersion(sortedVersions: List<SemanticVersion>) = when {
+        // There are no tags. Use the base/initial semantic version as untagged.
+        sortedVersions.isEmpty() -> untaggedVersion(SemanticVersion())
+        // The commit is tagged. Grab the top result as the current version.
+        procedures.isCommitTagged() -> sortedVersions.first()
+        // The commit is not tagged. Build the next untagged version based on configuration rules.
+        else -> untaggedVersion(sortedVersions.first().increment(configuration.untaggedIncrementRule))
     }
 
-    private fun untaggedVersion(firstVersion: SemanticVersion): SemanticVersion =
-        when (configuration.untaggedIncrementRule) {
-            SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMajor -> firstVersion.nextMajor()
-            SemanticVersionConfiguration.UntaggedIncrementRule.IncrementMinor -> firstVersion.nextMinor()
-            SemanticVersionConfiguration.UntaggedIncrementRule.IncrementPatch -> firstVersion.nextPatch()
-        }.asPreReleaseVersion(PreReleaseVersion(configuration.untaggedIdentifier))
+
+    private fun untaggedVersion(version: SemanticVersion): SemanticVersion =
+        version.asPreReleaseVersion(PreReleaseVersion(configuration.untaggedIdentifier))
+
 }

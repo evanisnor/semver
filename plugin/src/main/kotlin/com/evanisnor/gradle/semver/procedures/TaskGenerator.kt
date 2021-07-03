@@ -18,26 +18,15 @@ class TaskGenerator(
         project.tasks.register("versions", ListVersionsTask::class.java, behaviorModule)
         project.tasks.register("latestVersion", LatestVersionTask::class.java, behaviorModule)
         project.tasks.register("currentVersion", CurrentVersionTask::class.java, behaviorModule)
-        project.tasks.register("nextVersion", NextVersionTask::class.java, behaviorModule)
         project.tasks.register("releaseMajor", ReleaseNextMajorTask::class.java, behaviorModule)
         project.tasks.register("releaseMinor", ReleaseNextMinorTask::class.java, behaviorModule)
         project.tasks.register("releasePatch", ReleaseNextPatchTask::class.java, behaviorModule)
 
         runtimeModule.configuration().preReleaseIdentifiers.forEach { preReleaseIdentifier ->
-            // Register a new task to print the next pre-release version
-            project.tasks.register(
-                "next${preReleaseIdentifier.capitalize()}",
-                NextPreReleaseTask::class.java,
-                runtimeModule,
-                behaviorModule,
-                preReleaseIdentifier
-            )
-
             // Register a new release task to release the next pre-release version
             project.tasks.register(
                 "release${preReleaseIdentifier.capitalize()}",
                 ReleaseNextPreReleaseTask::class.java,
-                runtimeModule,
                 behaviorModule,
                 preReleaseIdentifier
             )
@@ -84,27 +73,6 @@ open class ListVersionsTask @Inject constructor(
     @TaskAction
     fun versions() {
         behaviorModule.listVersions().run()
-    }
-}
-
-open class NextVersionTask @Inject constructor(
-    private val behaviorModule: BehaviorModule
-) : DefaultTask() {
-
-    @TaskAction
-    fun nextVersion() {
-        behaviorModule.nextVersion().run()
-    }
-}
-
-open class NextPreReleaseTask @Inject constructor(
-    private val behaviorModule: BehaviorModule,
-    private val preReleaseIdentifier: String
-) : DefaultTask() {
-
-    @TaskAction
-    fun printNextVersion() {
-        behaviorModule.nextPreRelease(preReleaseIdentifier).run()
     }
 }
 

@@ -3,6 +3,7 @@ import com.evanisnor.semver.build.Dependencies
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`
+    id("com.evanisnor.semver.build")
 }
 
 gradlePlugin {

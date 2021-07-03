@@ -2,6 +2,15 @@ plugins {
     `kotlin-dsl`
 }
 
+gradlePlugin {
+    plugins {
+        create("semver-module") {
+            id = "com.evanisnor.semver.build"
+            implementationClass = "com.evanisnor.semver.build.ModulePlugin"
+        }
+    }
+}
+
 repositories {
     mavenCentral()
 }

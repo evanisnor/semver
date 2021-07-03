@@ -16,7 +16,7 @@ import com.evanisnor.gradle.semver.support.splitIdentifier
  * https://semver.org/#spec-item-9
  */
 data class PreReleaseVersion(
-    /* Includes hyphens an dots */
+    /* Includes hyphens and dots */
     val identifier: String,
     /* Includes hyphens */
     val fields: List<String> = identifier.splitIdentifier(),

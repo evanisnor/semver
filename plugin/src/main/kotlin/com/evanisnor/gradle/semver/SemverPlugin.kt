@@ -28,10 +28,11 @@ class SemverPlugin : Plugin<Project> {
         project.extensions.create("semanticVersion", SemanticVersionConfiguration::class.java)
 
         val runtimeModule = RuntimeModule(project)
-        val taskModule = BehaviorModule(runtimeModule)
+        val behaviorModule = BehaviorModule(runtimeModule)
 
-        TaskGenerator(runtimeModule, taskModule).registerTasks()
+        TaskGenerator(runtimeModule, behaviorModule).registerTasks()
 
-        project.version = taskModule.currentVersion().determineCurrentVersion()
+        val sortedVersions = runtimeModule.procedures().sortedVersions()
+        project.version = behaviorModule.currentVersion().determineCurrentVersion(sortedVersions)
     }
 }
